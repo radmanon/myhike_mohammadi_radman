@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My BCIT Project</title>
+    <meta name="comp1800 template" content="My 1800 App">
+
+    <!------------------------>
+    <!-- Required meta tags -->
+    <!------------------------>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!------------------------------------------>
+    <!-- Bootstrap Library CSS JS CDN go here -->
+    <!------------------------------------------>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
+    </script>
+
+    <!-------------------------------------------------------->
+    <!-- Firebase 8 Library related CSS, JS, JQuery go here -->
+    <!-------------------------------------------------------->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+
+
+    <!-------------------------------------------->
+    <!-- Other libraries and styles of your own -->
+    <!-------------------------------------------->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="./styles/style.css">
+    <script type = "text/javascript" src="main.js"></script>
+
+</head>
+<body>
+    <nav id="navbarPlaceholder"></nav>
+
+    <!-- the body of your page goes here -->
+
+    <div class="container-fluid bg-light text-dark p-5">
+        <div class="container bg-light p-5">
+            <h1 class="display-4">Good morning, radman<span id="firstname"></span></h1>
+            <hr>
+            <p>Quote of the day: <span id="output"></span></p>
+        </div>
+    </div>
+
+    <div class="container"> 
+        <h1>Some popular hikes</h1>
+        <!-- Here is the container for cards  -->
+        <div class="container">
+            <div id="hikes-go-here" class="row row-cols-auto">
+            </div>
+        </div>
+</div>
+
+<!-- Templates for general use, not displayed -->
+<template id="hikeCardTemplate">
+    <div class="card py-2 mx-2" style="width: 18rem">
+        <img class="card-image card-img-top" src=" ..." alt="..." />
+        <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <p class="card-length">placeholder</p>
+            <br />
+            <p class="card-text">
+                Some quick example text to build on the card title and make up the
+                bulk of the card's content.
+            </p>
+            <a class="btn btn-primary card-href">Read more ...</a>
+        </div>
+    </div>
+</template>
+
+
+    <!-- THE MAIN>JS SECTION WHICH HAS IMPLEMENTED HERE INSTEAD OF THE MAIN>JS LOCATION -->
+    <!-- Include Firebase Firestore SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
+
+    <script>
+// Your Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyBnYUfqyLku-Yu3n51ACdPARF1Pu1ImvlM",
+    authDomain: "comp1800-fb693.firebaseapp.com",
+    projectId: "comp1800-fb693",
+    storageBucket: "comp1800-fb693.appspot.com",
+    messagingSenderId: "1085465055470",
+    appId: "1:1085465055470:web:977adf4c1e44d615f523ff"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+// Initialize Firestore
+const db = firebase.firestore();
+
+// Function to write data to the Firestore collection
+function writeHikes() {
+    // Define a variable for the collection you want to create in Firestore to populate data
+    var hikesRef = db.collection("hikes");
+
+    // Add data to the Firestore collection
+    hikesRef.add({
+        code: "BBY01",
+        name: "Burnaby Lake Park Trail",
+        city: "Burnaby",
+        province: "BC",
+        level: "easy",
+        details: "A lovely place for a lunch walk",
+        length: 10,
+        hike_time: 60,
+        lat: 49.2467097082573,
+        lng: -122.9187029619698,
+        last_updated: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    hikesRef.add({
+        code: "AM01",
+        name: "Buntzen Lake Trail",
+        city: "Anmore",
+        province: "BC",
+        level: "moderate",
+        details: "Close to town, and relaxing",
+        length: 10.5,
+        hike_time: 80,
+        lat: 49.3399431028579,
+        lng: -122.85908496766939,
+        last_updated: firebase.firestore.Timestamp.fromDate(new Date("March 10, 2022"))
+    });
+
+    hikesRef.add({
+        code: "NV01",
+        name: "Mount Seymour Trail",
+        city: "North Vancouver",
+        province: "BC",
+        level: "hard",
+        details: "Amazing ski slope views",
+        length: 8.2,
+        hike_time: 120,
+        lat: 49.38847101455571,
+        lng: -122.94092543551031,
+        last_updated: firebase.firestore.Timestamp.fromDate(new Date("January 1, 2023"))
+    });
+}
+
+// Call the function to add data to Firestore
+writeHikes();
+
+// Additional code for retrieving data from Firestore (if needed)
+const outputElement = document.getElementById('output');
+
+// Reference to your Firestore collection
+const collectionRef = db.collection('quotes');
+
+// Specify the ID (document key) of the document you want to retrieve
+const documentId = 'monday'; // Replace with the actual document ID
+
+// Get the specific document by its ID
+collectionRef.doc(documentId).get().then((doc) => {
+    if (doc.exists) {
+        // Access the "quote" field within the document data
+        const quote = doc.data().quote;
+
+        // Create an HTML element to display the quote as plain text
+        const quoteElement = document.createElement('p');
+        quoteElement.textContent = quote;
+
+        // Append the quoteElement to the outputElement
+        outputElement.appendChild(quoteElement);
+    } else {
+        // Handle the case where the document doesn't exist
+        console.log('Document does not exist.');
+    }
+});
+
+// Function to display cards dynamically
+function displayCardsDynamically(collection) {
+    let cardTemplate = document.getElementById("hikeCardTemplate");
+
+    db.collection(collection).get()
+        .then(allHikes => {
+            allHikes.forEach(doc => {
+                var title = doc.data().name;
+                var details = doc.data().details;
+                var hikeCode = doc.data().code;
+                var hikeLength = doc.data().length;
+                var docID = doc.id;
+                let newcard = cardTemplate.content.cloneNode(true);
+
+                newcard.querySelector('.card-title').innerHTML = title;
+                newcard.querySelector('.card-length').innerHTML = hikeLength + "km";
+                newcard.querySelector('.card-text').innerHTML = details;
+                newcard.querySelector('.card-image').src = `./images/${hikeCode}.jpg`;
+                newcard.querySelector('a').href = "eachHike.html?docID="+docID;
+
+                document.getElementById(collection + "-go-here").appendChild(newcard);
+            })
+        });
+}
+
+displayCardsDynamically("hikes");
+
+
+
+    
+</script>
+    <!-- THE END OF THE MAIN>JS SECTION WHICH HAS IMPLEMENTED HERE INSTEAD OF THE MAIN>JS LOCATION -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- our own footer goes here-->
+<nav id="footerPlaceholder"></nav>
+
+    <!---------------------------------------------->
+    <!-- Your own JavaScript functions go here    -->
+    <!---------------------------------------------->
+    <script src="./scripts/firebaseAPI_TEAM99.js"></script>
+    <script src="./scripts/skeleton.js"></script>
+    <script src="./scripts/main.js"></script>
+    <script src="./scripts/eachHike.js"></script>
+
+
+</body>
+</html>
