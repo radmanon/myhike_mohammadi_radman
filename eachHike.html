@@ -24,49 +24,38 @@
     <!-- Firebase 8 Library related CSS, JS, JQuery go here -->
     <!-------------------------------------------------------->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.js"></script> 
     <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.css" />
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
 
     <!-------------------------------------------->
     <!-- Other libraries and styles of your own -->
     <!-------------------------------------------->
     <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
-    <!-- <link rel="stylesheet" href="./styles/style.css"> -->
+    <link rel="stylesheet" href="./styles/style.css">
 
 </head>
 
 <body>
+    <!------------------------------>
+    <!-- Your HTML Layout go here -->
+    <!------------------------------>
 
+    <!-- our own navbar goes here -->
+    <nav id="navbarPlaceholder"></nav>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-warning">
-        <a class="navbar-brand" href="#">HoCa Hikes</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="nav-item active">
-              <a class="nav-link" href="#">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="./profile.html">Profile</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">About Us</a>
-            </li>
-          </ul>
-        </div>
-      </nav>
-
-
-    
-    <h1>Hike</h1>
+    <!-- the body of your page goes here -->
+    <!-- stuff -->
     <div class="container">
-        <h1><span id="hikeName"></span></h1>
-        <img class="hike-img responsive" src="./images/BBY01.jpg" alt="Hike Image" id="hikeImage" />
+        <h1><span id="hikeName">this hike</span></h1>
+        <div class="position-relative">
+            <img class="hike-img responsive" src="" alt="Hike photo">
+            <button class="btn btn-primary position-absolute bottom-0 end-0 m-3"
+                onclick="saveHikeDocumentIDAndRedirect()">Write Review</button>
+        </div>
     </div>
 
     <div class="container">
@@ -79,114 +68,25 @@
             </div>
         </div>
     </div>
-
+    
+    <template id="reviewCardTemplate">
         <div class="card bg-secondary">
             <img class="card-img-top">
             <div class="card-body bg-light">
-                <h5 class="title">test</h5>
-                <p class="time">April 8, 2023 at 13:16:05PM UTC-8</p>
-                <p class="level">Easy</p>
-                <p class="season">Fall</p>
-                <p class="scrambled">Yes</p>
-                <p class="flooded">No</p>
+                <h5 class="title">placeholder</h5>
+                <p class="star-rating"></p>
+                <p class="time">placeholder</p>
+                <p class="level">placeholder</p>
+                <p class="season">placeholder</p>
+                <p class="scrambled">placeholder</p>
+                <p class="flooded">placeholder</p>
                 <br>
-                <p class="description">It was a nice trail.</p>
+                <p class="description">This card has supporting text below as a natural lead-in to additional content.</p>
             </div>
         </div>
+    </template>
 
-
-    <script>
-        // Your Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyBnYUfqyLku-Yu3n51ACdPARF1Pu1ImvlM",
-            authDomain: "comp1800-fb693.firebaseapp.com",
-            projectId: "comp1800-fb693",
-            storageBucket: "comp1800-fb693.appspot.com",
-            messagingSenderId: "1085465055470",
-            appId: "1:1085465055470:web:977adf4c1e44d615f523ff"
-        };
-
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-
-        // Initialize Firestore
-        const db = firebase.firestore();
-
-        // Function to display hike details
-        function displayHikeInfo() {
-            let params = new URL(window.location.href); // Get URL of search bar
-            let ID = params.searchParams.get("docID"); // Get value for key "docID"
-
-            // doublecheck: is your collection called "hikes"?
-            db.collection("hikes")
-                .doc(ID)
-                .get()
-                .then(doc => {
-                    thisHike = doc.data();
-                    hikeCode = thisHike.code;
-                    hikeName = doc.data().name;
-
-                    // Set the title
-                    document.getElementById("hikeName").innerHTML = hikeName;
-
-                    // Set the image src
-                    let imgEvent = document.getElementById("hikeImage"); // Get the image element by ID
-                    let imageUrl = `./images/${hikeCode}.jpg`; // Adjust the path to match your image location
-                    imgEvent.src = imageUrl;
-                });
-        }
-
-        // Call the function to display hike details
-        displayHikeInfo();
-
-
-        //------------------------------------------------------------------------------
-// Input parameter is a string representing the collection we are reading from
-//------------------------------------------------------------------------------
-function displayCardsDynamically(collection) {
-    let cardTemplate = document.getElementById("hikeCardTemplate"); // Retrieve the HTML element with the ID "hikeCardTemplate" and store it in the cardTemplate variable. 
-
-    db.collection(collection).get()   //the collection called "hikes"
-        .then(allHikes=> {
-            //var i = 1;  //Optional: if you want to have a unique ID for each hike
-            allHikes.forEach(doc => { //iterate thru each doc
-                var title = doc.data().name;       // get value of the "name" key
-                var details = doc.data().details;  // get value of the "details" key
-								var hikeCode = doc.data().code;    //get unique ID to each hike to be used for fetching right image
-                var hikeLength = doc.data().length; //gets the length field
-                let newcard = cardTemplate.content.cloneNode(true); // Clone the HTML template to create a new card (newcard) that will be filled with Firestore data.
-
-                //update title and text and image
-                newcard.querySelector('.card-title').innerHTML = title;
-                newcard.querySelector('.card-length').innerHTML = hikeLength +"km";
-                newcard.querySelector('.card-text').innerHTML = details;
-                newcard.querySelector('.card-image').src = `./images/${hikeCode}.jpg`; //Example: NV01.jpg
-
-                //Optional: give unique ids to all elements for future use
-                // newcard.querySelector('.card-title').setAttribute("id", "ctitle" + i);
-                // newcard.querySelector('.card-text').setAttribute("id", "ctext" + i);
-                // newcard.querySelector('.card-image').setAttribute("id", "cimage" + i);
-
-                //attach to gallery, Example: "hikes-go-here"
-                document.getElementById(collection + "-go-here").appendChild(newcard);
-
-                //i++;   //Optional: iterate variable to serve as unique ID
-            })
-        })
-}
-
-displayCardsDynamically("hikes");  //input param is the name of the collection
-
-
-
-
-    </script>
-
-<!-- our own navbar goes here -->
-<nav id="navbarPlaceholder"></nav>
-
-    <!-- the body of your page goes here -->
-    <!-- stuff -->
+    
 
     <!-- our own footer goes here-->
     <nav id="footerPlaceholder"></nav>
@@ -196,8 +96,8 @@ displayCardsDynamically("hikes");  //input param is the name of the collection
     <!---------------------------------------------->
     <script src="./scripts/firebaseAPI_TEAM99.js"></script>
     <script src="./scripts/skeleton.js"></script>
-    <script src="./scripts/script.js"></script>
     <script src="./scripts/eachHike.js"></script>
+    <!-- <script src="./scripts/script.js"></script> -->
 
 </body>
 

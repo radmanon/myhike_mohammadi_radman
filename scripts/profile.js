@@ -36,9 +36,26 @@ function populateUserInfo() {
 populateUserInfo();
 
 
-
-
 function editUserInfo() {
     //Enable the form fields
     document.getElementById('personalInfoFields').disabled = false;
  }
+
+ function saveUserInfo() {
+    //enter code here
+
+    userName = document.getElementById('nameInput').value;       //get the value of the field with id="nameInput"
+    userSchool = document.getElementById('schoolInput').value;     //get the value of the field with id="schoolInput"
+    userCity = document.getElementById('cityInput').value;       //get the value of the field with id="cityInput"
+
+    currentUser.update({
+        name: userName,
+        school: userSchool,
+        city: userCity
+    })
+        .then(() => {
+            console.log("Document successfully updated!");
+        })
+
+    document.getElementById('personalInfoFields').disabled = true;
+}

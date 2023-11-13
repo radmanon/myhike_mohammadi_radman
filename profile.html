@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <title>Profile</title>
+    <title>My BCIT Project</title>
     <meta name="comp1800 template" content="My 1800 App">
 
     <!------------------------>
@@ -23,49 +24,31 @@
     <!-- Firebase 8 Library related CSS, JS, JQuery go here -->
     <!-------------------------------------------------------->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.js"></script>
-    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.css">
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-
+    <script src="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.js"></script> 
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.css" />
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
 
     <!-------------------------------------------->
     <!-- Other libraries and styles of your own -->
     <!-------------------------------------------->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="./styles/style.css">
-    <script type = "text/javascript" src="main.js"></script>
-
-
-
-    <script src="https://www.gstatic.com/firebasejs/9.2.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.2.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.2.0/firebase-firestore.js"></script>
-    <script>
-      // Initialize Firebase with your project configuration
-      var firebaseConfig = {
-        apiKey: "AIzaSyBnYUfqyLku-Yu3n51ACdPARF1Pu1ImvlM",
-        authDomain: "comp1800-fb693.firebaseapp.com",
-        projectId: "comp1800-fb693",
-        storageBucket: "comp1800-fb693.appspot.com",
-        messagingSenderId: "1085465055470",
-        appId: "1:1085465055470:web:977adf4c1e44d615f523ff"
-      };
-      firebase.initializeApp(firebaseConfig);
-      var db = firebase.firestore(); // Initialize Firestore
-    </script>
-    
+    <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
+    <!-- <link rel="stylesheet" href="./styles/style.css"> -->
 
 </head>
+
 <body>
+    <!------------------------------>
+    <!-- Your HTML Layout go here -->
+    <!------------------------------>
 
-
+    <!-- our own navbar goes here -->
     <nav id="navbarPlaceholder"></nav>
-    
-    
-    
+
+    <!-- the body of your page goes here -->
+    <!-- stuff -->
     <div class="container">
         <h1>User Profile </h1>
         <form>
@@ -86,78 +69,22 @@
             <div class="d-flex justify-content-end mt-5">
                 <button type="button" class="btn btn-secondary" onclick="editUserInfo()">Edit</button>
                 <span style="width: 10px"></span>
-                <button type="button" class="btn btn-info">Save</button>
+                <button type="button" class="btn btn-info" onclick="saveUserInfo()">Save</button>
             </div>
         </form>
-    </div>
-
-    
-<script>
-var currentUser;               //points to the document of the user who is logged in
-function populateUserInfo() {
-            firebase.auth().onAuthStateChanged(user => {
-                // Check if user is signed in:
-                if (user) {
-
-                    //go to the correct user document by referencing to the user uid
-                    currentUser = db.collection("users").doc(user.uid)
-                    //get the document for current user.
-                    currentUser.get()
-                        .then(userDoc => {
-                            //get the data fields of the user
-                            var userName = userDoc.data().name;
-                            var userSchool = userDoc.data().school;
-                            var userCity = userDoc.data().city;
-
-                            //if the data fields are not empty, then write them in to the form.
-                            if (userName != null) {
-                                document.getElementById("nameInput").value = userName;
-                            }
-                            if (userSchool != null) {
-                                document.getElementById("schoolInput").value = userSchool;
-                            }
-                            if (userCity != null) {
-                                document.getElementById("cityInput").value = userCity;
-                            }
-                        })
-                } else {
-                    // No user is signed in.
-                    console.log ("No user is signed in");
-                }
-            });
-        }
-
-//call the function to run it 
-populateUserInfo();
-
-
-
-
-function editUserInfo() {
-    //Enable the form fields
-    document.getElementById('personalInfoFields').disabled = false;
- }
-
-</script>
-
-
-
-
-
+</div>
 
     <!-- our own footer goes here-->
-<nav id="footerPlaceholder"></nav>
+    <nav id="footerPlaceholder"></nav>
 
-<!---------------------------------------------->
-<!-- Your own JavaScript functions go here    -->
-<!---------------------------------------------->
-<script src="./scripts/firebaseAPI_TEAM99.js"></script>
-<script src="./scripts/profile.js"></script>
+    <!---------------------------------------------->
+    <!-- Your own JavaScript functions go here    -->
+    <!---------------------------------------------->
+    <script src="./scripts/firebaseAPI_TEAM99.js"></script>
+    <script src="./scripts/skeleton.js"></script>
+    <!-- <script src="./scripts/script.js"></script> -->
+    <script src="./scripts/profile.js"></script>
+
 </body>
+
 </html>
-
-
-
-
-
-
